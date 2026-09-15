@@ -1,5 +1,5 @@
-const STORAGE_KEY = 'straincharactersheet';
-const SETTINGS_KEY = 'straincharactersheetsettings';
+const STORAGE_KEY = 'hubrischaractersheet';
+const SETTINGS_KEY = 'hubrischaractersheetsettings';
 let sensitiveMode = false;
 let selectedCharacterID = null;
 let saveLocal = false;
@@ -499,11 +499,11 @@ function updateSelectedFatigueSlot(slotNumber) {
     }
 }
 
-function getVisibleFatigueSlots(powerScore) {
+function getVisibleFatigueSlots(fatigueLimit) {
     const visibleSlots = [];
 
     for (let slot = 1; slot <= 6; slot += 1) {
-        if (powerScore >= slot) {
+        if (fatigueLimit >= slot) {
             visibleSlots.push(slot);
         }
     }
@@ -512,13 +512,13 @@ function getVisibleFatigueSlots(powerScore) {
 }
 
 function updateFatigueSlots() {
-    const powerScoreInput = document.getElementById('powerscore');
-    const powerScore = powerScoreInput.value === '' ? 6 : Number(powerScoreInput.value);
-    const visibleSlots = getVisibleFatigueSlots(powerScore);
+    const fatigueLimitInput = document.getElementById('fatiguelimit');
+    const fatigueLimit = fatigueLimitInput.value === '' ? 6 : Number(fatigueLimitInput.value);
+    const visibleSlots = getVisibleFatigueSlots(fatigueLimit);
 
     for (let slot = 1; slot <= 6; slot += 1) {
         const { cell } = getFatigueSlotElements(slot);
-        cell.style.display = powerScore >= slot ? '' : 'none';
+        cell.style.display = fatigueLimit >= slot ? '' : 'none';
     }
 
     if (!visibleSlots.includes(selectedFatigueSlot)) {
@@ -671,7 +671,7 @@ function rollDie(num, sides, advval) {
     return dice;
 }
 
-document.getElementById('powerscore').addEventListener('input', updateFatigueSlots);
+document.getElementById('fatiguelimit').addEventListener('input', updateFatigueSlots);
 const settingsWhenLoading = getSettings();
 saveLocal = settingsWhenLoading.saveLocally;
 document.getElementById('savelocally').checked = saveLocal;
